@@ -1,23 +1,28 @@
 const searchFrom = document.querySelector('.search');
 const input =document.querySelector('.input');
-const newList = document.querySelector('.news-list');
+const newsList = document.querySelector('.news-list');
 
 searchFrom.addEventListener('submit', retrieve)
 
 function retrieve(e){
+let search; 
+
 
    if (input.value==''){
       alert('Type in your title first!')
       return
+   } else {
+      search = input.value
    }
 
-   newList.innerHTML=''
 
    e.preventDefault()
 
    const apiKey = '4ee34072adc342389d94659d10e93c81'
 
-let url =`https://newsapi.org/v2/everything?q=${covid-19}&apiKey=${apiKey}`
+
+let url =`https://newsapi.org/v2/everything?q=${search}&apiKey=${apiKey}`
+
 
 fetch(url).then((res)=>{
 
@@ -26,6 +31,7 @@ fetch(url).then((res)=>{
 }).then((data)=>{
 
   console.log(data)
+  if(data.articles.length>0){
   data.articles.forEach(article => { 
      let li = document.createElement('li');
      let a = document.createElement('a');
@@ -34,12 +40,17 @@ fetch(url).then((res)=>{
      a.textContent = article.title;
      
      li.appendChild(a);
-     newList.appendChild(li);
-
+     newsList.appendChild(li);
+   })
+} else {
+   const noResults=document.createElement('p')
+   noResults.textContent='no results found'
+   newsList.appendChild(noResults)
+  } 
    }).catch((error)=>{
       console.log(error)
    })
-})
+
 
 
 }
